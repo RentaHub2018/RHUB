@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "720723353857",
+    "firebase_url": "https://rentalhub-d60f6.firebaseio.com",
+    "project_id": "rentalhub-d60f6",
+    "storage_bucket": "rentalhub-d60f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720723353857:android:ae787f3f871f1502",
+        "android_client_info": {
+          "package_name": "com.example.dell.fenny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720723353857-hfbhojdg9atj25tmbktf5g253nha5cfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dell.fenny",
+            "certificate_hash": "0c2258e1a7b3fc42fe2f53eed096d6f2a63381d1"
+          }
+        },
+        {
+          "client_id": "720723353857-8ggghtgi054u05l5sn810g1ditue2vlf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dell.fenny",
+            "certificate_hash": "0d78be00efd993faa22df56a5a5d24864499a0c8"
+          }
+        },
+        {
+          "client_id": "720723353857-30aeltb9va63tq0unn2cfg9pcc3hvvt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxkfNFNb33XpWYORHLeymiMMk3Ar1u75s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720723353857-30aeltb9va63tq0unn2cfg9pcc3hvvt8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
