@@ -1,6 +1,7 @@
 package com.example.dell.fenny.Models;
 
 public class HouseRegisteration {
+    String image;
     String area;
     String amount;
     String rooms;
@@ -15,6 +16,39 @@ public class HouseRegisteration {
     boolean handicap;
     String phone;
     String description;
+
+
+    public HouseRegisteration(String image,
+                              String area,
+                              String amount,
+                              String rooms,
+                              boolean tv,
+                              boolean fridge,
+                              boolean kitchen,
+                              boolean wifi,
+                              boolean machine,
+                              boolean ac,
+                              boolean furniture,
+                              boolean parking,
+                              boolean handicap,
+                              String phone,
+                              String description) {
+        this.image = image;
+        this.area = area;
+        this.amount = amount;
+        this.rooms = rooms;
+        this.tv = tv;
+        this.fridge = fridge;
+        this.kitchen = kitchen;
+        this.wifi = wifi;
+        this.machine = machine;
+        this.ac = ac;
+        this.furniture = furniture;
+        this.parking = parking;
+        this.handicap = handicap;
+        this.phone = phone;
+        this.description = description;
+    }
 
     public HouseRegisteration() {
     }
@@ -159,5 +193,13 @@ public class HouseRegisteration {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

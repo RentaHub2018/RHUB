@@ -3,6 +3,7 @@ package com.example.dell.fenny.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,8 +32,16 @@ import android.widget.Toast;
 
 import com.example.dell.fenny.Models.HouseRegisteration;
 import com.example.dell.fenny.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,8 +53,12 @@ public class HaveHome extends Fragment {
       private EditText editarea;
       private EditText editrent;
       private TextView editphoto;
+    public StorageReference storageReferenceUploadImage;
+    public FirebaseStorage storage;
       private ImageView myUploadedImageViewer;
-      Integer REQUEST_CAMERA = 1,SELECT_FILE = 0;
+      public String selectedImageUid;
+    Uri selectedImageUri;
+    Integer REQUEST_CAMERA = 1,SELECT_FILE = 0;
 
 
 
@@ -137,6 +151,7 @@ public class HaveHome extends Fragment {
         });
 
 
+        storage = FirebaseStorage.getInstance();
         SelectImage();
          setUpGridLayoutItems(view);
          addSubRooms(view);
@@ -156,16 +171,17 @@ public class HaveHome extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(items[i].equals("Camera")){
 
-                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent,REQUEST_CAMERA);
+                    try{
+                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent,REQUEST_CAMERA);
+                    }catch (Exception e){
+                        Toast.makeText(getContext(), "Camera Failed", Toast.LENGTH_SHORT).show();
+                    }
 
                 }else if(items[i].equals("Gallery")){
-
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore
-                            .Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(intent.createChooser(intent,"Select File"),SELECT_FILE);
-
                 }else if(items[i].equals("Cancel")){
                     dialogInterface.dismiss();
                 }
@@ -175,18 +191,16 @@ public class HaveHome extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
+    public void onActivityResult(int requestCode,int resultCode,Intent data){ super.onActivityResult(requestCode,resultCode,data);
 
         if(resultCode==Activity.RESULT_OK){
+            selectedImageUri = data.getData();
             if(requestCode== REQUEST_CAMERA){
                 Bundle bundle = data.getExtras();
                 final Bitmap bmp =(Bitmap) bundle.get("data");
                 myUploadedImageViewer.setImageBitmap(bmp);
 
             }else if(requestCode==SELECT_FILE){
-
-                Uri selectedImageUri = data.getData();
                 myUploadedImageViewer.setImageURI(selectedImageUri);
 
             }
@@ -376,6 +390,7 @@ public class HaveHome extends Fragment {
             myRentAmountEditText,
             myPhoneNumberEditText,
             myDescriptionEditText;
+
     private Button mySubmitandUploadButton;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -395,6 +410,7 @@ public class HaveHome extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "clicked submit button", Toast.LENGTH_SHORT).show();
+
                 setupHouseRegisterationDetails(view);
             }
         });
@@ -406,6 +422,7 @@ public class HaveHome extends Fragment {
         myPhoneNumberEditText = (EditText)view.findViewById(R.id.myEnterPhoneNumberEditTextHomeFragment);
         myDescriptionEditText = (EditText)view.findViewById(R.id.myEnterDescriptionEditTextHomeFragment);
 
+        selectedImageUid = "images/"+ UUID.randomUUID().toString();
         String area = myAreaorSectorEditText.getText().toString();
         String amount = myRentAmountEditText.getText().toString();
         String phone = myPhoneNumberEditText.getText().toString();
@@ -417,6 +434,7 @@ public class HaveHome extends Fragment {
                 phone,
                 description,
                 room,
+                selectedImageUid,
                 SELECTED_TV,
                 SELECTED_FRIDGE,
                 SELECTED_KITCHEN,
@@ -428,11 +446,14 @@ public class HaveHome extends Fragment {
                 SELECTED_HANDICAP);
     }
 
+
+
     private void uploadDataToFirebase(String area,
                                       String amount,
                                       String phone,
                                       String description,
                                       String room,
+                                      String imageuri,
                                       boolean TV,
                                       boolean FRIDGE,
                                       boolean KITCHEN,
@@ -452,6 +473,7 @@ public class HaveHome extends Fragment {
         registeration.setPhone(phone);
         registeration.setDescription(description);
         registeration.setRooms(room);
+        registeration.setImage(imageuri);
 
         registeration.setTv(TV);
         registeration.setFridge(FRIDGE);
@@ -464,6 +486,41 @@ public class HaveHome extends Fragment {
         registeration.setHandicap(HANDICAP);
 
         myRef.child("RegisteredHouses").push().setValue(registeration);
+        storageReferenceUploadImage = storage.getReference().child("HouseRegisteration");
+
+        //Firebase
+        if(selectedImageUri != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReferenceUploadImage.child(selectedImageUid);
+
+            ref.putFile(selectedImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
     }
 
     @Override

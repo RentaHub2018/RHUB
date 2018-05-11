@@ -29,6 +29,7 @@ import com.example.dell.fenny.fragments.Home;
 import com.example.dell.fenny.fragments.Logout;
 import com.example.dell.fenny.fragments.PostRequirement;
 import com.example.dell.fenny.fragments.RateUs;
+import com.example.dell.fenny.fragments.ScreenMainFragment;
 import com.example.dell.fenny.fragments.Share;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -128,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_item_share) {
 
             return true;
         }
@@ -144,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity
 
         switch(itemId){
             case R.id.nav_home:
-                fragment = new Home();
+                fragment = new ScreenMainFragment();
                 break;
             case R.id.nav_postrequirement:
                 fragment = new PostRequirement();
@@ -158,8 +159,6 @@ public class ProfileActivity extends AppCompatActivity
             case R.id.nav_blockeduser:
                 fragment = new BlockedUser();
                 break;
-            case R.id.nav_share:
-                fragment = new Share();
             case R.id.nav_aboutus:
                 fragment = new AboutUs();
                 break;

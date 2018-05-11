@@ -1,13 +1,92 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bc2"
+    android:backgroundTintMode="multiply"
+    android:backgroundTint="#47fbfcfc"
     tools:context="com.example.dell.fenny.fragments.AboutUs">
 
+
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="About Us" />
+        android:orientation="vertical">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="250dp"
+       android:orientation="horizontal">
+       <ImageView
+           android:layout_width="200dp"
+           android:layout_height="150dp"
+           android:layout_margin="@dimen/fab_margin"
+           android:src="@drawable/female"/>
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
 
-</FrameLayout>
+           <TextView
+
+           android:layout_marginTop="@dimen/fab_margin"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Name = priyal Taank"
+               android:textSize="15dp"
+               android:textColor="#0e0e0e"/>
+
+           <TextView
+               android:layout_marginTop="@dimen/fab_margin"
+               android:layout_marginRight="@dimen/fab_margin"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="15dp"
+               android:textColor="#0e0e0e"
+               android:text="Emailid=taankpriyal@gmail.com"/>
+
+       </LinearLayout>
+
+   </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="2">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/female"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name = Feni Patel"
+                    android:textSize="15dp"
+                    android:textColor="#0e0e0e"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email=patelfeni20@gmail.com"
+                    android:textSize="15dp"
+                    android:textColor="#0e0e0e"
+                    android:layout_marginTop="@dimen/fab_margin"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

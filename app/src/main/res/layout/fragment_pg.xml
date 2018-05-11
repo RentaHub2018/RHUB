@@ -3,6 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="@drawable/bc2"
+    android:backgroundTintMode="multiply"
+    android:backgroundTint="#47fbfcfc"
     tools:context="com.example.dell.fenny.fragments.PG">
     <RelativeLayout
         android:layout_width="match_parent"
